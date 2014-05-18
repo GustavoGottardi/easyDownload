@@ -3,7 +3,7 @@
 *
 * easyDownload app para lliure (5.x)
 *
-* @versão 1.0
+* @Versão 2.0
 * @DesenvolvedorGustavo Gottardi <gustavo.gottardi@hotmail.com>
 * @entre em contato com o desenvolvedor <gustavo.gottardi@hotmail.com> 
 * @licença http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -17,7 +17,7 @@
 	$dir = "../uploads/edownloads/";
 	$arquivo = mysql_fetch_array(mysql_query('select * from '.$pluginTable.'_grupos where id = "'.$_GET['grupo'].'" limit 1'));
 	?>
-	<h4><?php echo $arquivo['nome']?></h4>
+	<h2><?php echo $arquivo['nome']?></h2>
 	<?php
 	if(!isset($_GET['id'])){
 		if(isset($_GET['del'])){
@@ -58,20 +58,9 @@
 		if(!empty($_POST)){
 			$erro = false;
 			
-			if(!empty($_FILES['arquivo']['name'])){
-				$arquivo = $_FILES['arquivo'];
-				$arquivoNome = explode('.', $arquivo['name']);
-				$arquivoNome = array_pop($arquivoNome); // pega a extenção
-				$arquivoNome = md5(uniqid(time())).'.'.$arquivoNome;	
-
-				$caminho_imagem = $arquivo['tmp_name'];
-
-				$path =  $dir.$arquivoNome;
-				move_uploaded_file($arquivo["tmp_name"], $path);
-				$_POST['arquivo'] = $arquivoNome;
-				
-				@unlink($dir.$_POST['imagemOld']);
-			} 
+			$file = new fileup;
+			$file->diretorio = '../uploads/agende/';
+			$file->up(); 
 		
 			if(!empty($_GET['id'])){
 				$alter['id'] = $_GET['id'];
@@ -92,23 +81,34 @@
 			
 		?>
 		<form class="form" method="post" enctype="multipart/form-data">
-			<div>
-				<label>Nome</label>
-				<input type="text"  <?php $item = 'nome';  echo 'name="'.$item.'"'.(isset($dados[$item])?'value="'.$dados[$item].'"': '') ?> />
-			</div>
-						
-			<div>
-				<label>Arquivo</label>
-				<?php
-				if(!empty($dados['arquivo']))
-					echo '<input type="hidden" name="imagemOld" value="'.$dados['arquivo'].'" />'				
-				?>
-				<input type="file" name="arquivo" />
-				<span class="ex">Para trocar sua arquivo apenas selecione uma novo. <strong>Campo opcional</strong></span>
-			</div>	
+			<fieldset>
+				<div>
+					<label>Nome</label>
+					<input type="text"  <?php $item = 'nome';  echo 'name="'.$item.'"'.(isset($dados[$item])?'value="'.$dados[$item].'"': '') ?> />
+				</div>
 				
-			<span class="botao"><button type="submit">Gravar</button></span>
-			<span class="botao"><a href="<?php echo $backReal?>">Voltar</a></span>
+				<div>
+					<label>Indormações adicionais</label>
+					<input type="text"  <?php $item = 'info';  echo 'name="'.$item.'"'.(isset($dados[$item])?'value="'.$dados[$item].'"': '') ?> />
+				</div>
+
+				<div>
+					<?php
+					$file = new fileup; 
+					$file->titulo = 'Arquivo:';
+					$file->rotulo = 'Selecionar arquivo';
+					$file->registro = $dados['arquivo'];
+					$file->campo = 'arquivo';
+					$file->extencao = '*';
+					$file->form();
+					?>
+				</div>
+			</fieldset>	
+			
+			<div class="botoes">
+				<button type="submit" class="confirm">Gravar</button>
+				<a href="<?php echo $backReal?>">Voltar</a>
+			</div>
 		</form>
 		<?php
 		unset($dados);
