@@ -1,9 +1,8 @@
 <?php
 /**
 *
-* easyDownload app para lliure (5.x)
-*
-* @Versão 2.0
+* easyDownload
+* @Versão 3.0
 * @DesenvolvedorGustavo Gottardi <gustavo.gottardi@hotmail.com>
 * @entre em contato com o desenvolvedor <gustavo.gottardi@hotmail.com> 
 * @licença http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -47,7 +46,7 @@
 				<tr id="<?php echo "empr".$dados['id'];?>">
 					<td><a href="<?php echo $pluginHome."&amp;p=downloads&amp;grupo=".$_GET['grupo']."&amp;id=".$dados['id']?>"><?php echo $dados['nome'];?></a></td>
 					
-					<td><a href="<?php echo $pluginHome."&amp;p=downloads&amp;grupo=".$_GET['grupo']."&amp;del=".$dados['id'];?>" onclick="return confirmAlgo('Você quer mesmo excluir esse arquivo?')" ><img src="imagens/icones/trash.png"></td>
+					<td><a href="<?php echo $pluginHome."&amp;p=downloads&amp;grupo=".$_GET['grupo']."&amp;del=".$dados['id'];?>" onclick="return confirmAlgo('Você quer mesmo excluir esse arquivo?')" ><i class="fa fa-lg fa-trash-o"></i></td>
 				</tr>
 				<?php
 			}
@@ -59,7 +58,7 @@
 			$erro = false;
 			
 			$file = new fileup;
-			$file->diretorio = '../uploads/agende/';
+			$file->diretorio = '../uploads/easydownload/';
 			$file->up(); 
 		
 			if(!empty($_GET['id'])){
